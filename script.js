@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
     setupEmotions();
     setupAnimationGeneration();
     new FileUploadHandler();
+    setupDownloadButtons();
+    setupContactDialog();
 });
 
 /**
@@ -282,9 +284,13 @@ class FileUploadHandler {
 function setupAnimationGeneration() {
     const generateBtn = document.querySelector('.generate-btn');
     const resultPreview = document.querySelector('.result-preview');
-    const videoElement = document.querySelector('.result-animation');
-    const progressBar = resultPreview.querySelector('.progress');
-    const progressText = resultPreview.querySelector('.progress-text');
+    if (!generateBtn || !resultPreview) {
+        console.log('Animation generation elements not found');
+        return;
+    }
+    const videoElement = resultPreview.querySelector('.result-animation');
+    const progressBar = resultPreview?.querySelector('.progress');
+    const progressText = resultPreview?.querySelector('.progress-text');
 
     generateBtn.addEventListener('click', async () => {
         const selectedEmotions = Array.from(document.querySelectorAll('.emotion.active'))
@@ -308,30 +314,32 @@ function setupAnimationGeneration() {
                     progress = 100;
                     clearInterval(interval);
                 }
-                progressBar.style.width = `${progress}%`;
-                progressText.textContent = `${Math.round(progress)}%`;
+                if (progressBar) progressBar.style.width = `${progress}%`;
+                if (progressText) progressText.textContent = `${Math.round(progress)}%`;
             }, 300);
 
             // 模拟API调用生成动画
             await new Promise(resolve => setTimeout(resolve, 3000));
 
-            // 更新视频源
-            const newSources = [
-                { src: `animations/${selectedEmotions.join('-')}.webm`, type: 'video/webm' },
-                { src: `animations/${selectedEmotions.join('-')}.mp4`, type: 'video/mp4' }
-            ];
+            if (videoElement) {
+                // 更新视频源
+                const newSources = [
+                    { src: `animations/${selectedEmotions.join('-')}.webm`, type: 'video/webm' },
+                    { src: `animations/${selectedEmotions.join('-')}.mp4`, type: 'video/mp4' }
+                ];
 
-            // 暂停当前视频
-            videoElement.pause();
+                // 暂停当前视频
+                videoElement.pause();
 
-            // 更新视频源
-            videoElement.innerHTML = newSources
-                .map(source => `<source src="${source.src}" type="${source.type}">`)
-                .join('');
+                // 更新视频源
+                videoElement.innerHTML = newSources
+                    .map(source => `<source src="${source.src}" type="${source.type}">`)
+                    .join('');
 
-            // 重新加载并播放视频
-            videoElement.load();
-            videoElement.play();
+                // 重新加载并播放视频
+                videoElement.load();
+                videoElement.play();
+            }
 
             // 移除加载状态
             resultPreview.classList.remove('loading');
@@ -344,5 +352,217 @@ function setupAnimationGeneration() {
             generateBtn.disabled = false;
         }
     });
+}
+
+// 下载功能实现
+function downloadImage(url, filename) {
+    fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        })
+        .catch(error => {
+            console.error('下载失败:', error);
+            alert('下载失败，请稍后重试');
+        });
+}
+
+// 下载视频功能
+function downloadVideo(url, filename) {
+    fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(link.href);
+        })
+        .catch(error => {
+            console.error('下载失败:', error);
+            alert('下载失败，请稍后重试');
+        });
+}
+
+// 设置下载按钮事件
+function setupDownloadButtons() {
+    // 设置风格卡片的下载按钮
+    document.querySelectorAll('.style-card .action-btn').forEach(btn => {
+        if (btn.querySelector('svg path[d="M3 15v4h18v-4"]')) { // 下载图标的按钮
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = btn.closest('.style-card');
+                const img = card.querySelector('.result-img');
+                const filename = `cartoon-style-${Date.now()}.png`;
+                downloadImage(img.src, filename);
+            });
+        }
+    });
+
+    // 设置结果区域的下载按钮
+    const generateBtn = document.querySelector('.generate-btn');
+    if (generateBtn) {
+        generateBtn.addEventListener('click', () => {
+            const resultContainer = document.querySelector('.result-container');
+            const video = resultContainer.querySelector('video');
+            const filename = `cartoon-animation-${Date.now()}.${video.currentSrc.endsWith('.webm') ? 'webm' : 'mp4'}`;
+            downloadVideo(video.currentSrc, filename);
+        });
+    }
+
+    // 设置表情预览的下载功能
+    document.querySelectorAll('.emotion').forEach(emotion => {
+        emotion.addEventListener('dblclick', () => {
+            const img = emotion.querySelector('img');
+            const emotionName = emotion.querySelector('span').textContent;
+            const filename = `cartoon-emotion-${emotionName.toLowerCase()}.png`;
+            downloadImage(img.src, filename);
+        });
+    });
+
+    // 设置结果网格的下载按钮
+    document.querySelectorAll('.result-card .action-btn').forEach(btn => {
+        if (btn.querySelector('svg path[d="M3 15v4h18v-4"]')) { // 下载图标的按钮
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = btn.closest('.result-card');
+                const media = card.querySelector('video, img');
+                const isVideo = media.tagName.toLowerCase() === 'video';
+                const filename = `cartoon-${isVideo ? 'animation' : 'result'}-${Date.now()}.${isVideo ? (media.currentSrc.endsWith('.webm') ? 'webm' : 'mp4') : 'png'}`;
+                if (isVideo) {
+                    downloadVideo(media.currentSrc, filename);
+                } else {
+                    downloadImage(media.src, filename);
+                }
+            });
+        }
+    });
+}
+
+// 更新现有的创建浮动头像函数，添加下载功能
+function createFloatingAvatars() {
+    const heroSection = document.querySelector('.hero');
+    const avatarUrls = [
+        'images/avatars/avatar1.png',
+        'images/avatars/avatar2.png',
+        'images/avatars/avatar3.png',
+        'images/avatars/avatar4.png',
+        'images/avatars/avatar5.png',
+        'images/avatars/avatar6.png'
+    ];
+
+    avatarUrls.forEach((url, index) => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.classList.add('floating-avatar', `avatar-${index + 1}`);
+        img.style.setProperty('--rotation', `${Math.random() * 40 - 20}deg`);
+        
+        // 添加双击下载功能
+        img.addEventListener('dblclick', () => {
+            const filename = `cartoon-avatar-${index + 1}.png`;
+            downloadImage(url, filename);
+        });
+
+        heroSection.appendChild(img);
+    });
+}
+
+/**
+ * 设置联系按钮和二维码对话框交互
+ */
+function setupContactDialog() {
+    console.log('Setting up contact dialog...');
+    
+    const contactBtn = document.querySelector('.contact-btn');
+    console.log('Contact button found:', contactBtn);
+    
+    const dialog = document.querySelector('.qr-dialog');
+    console.log('Dialog found:', dialog);
+    
+    const closeBtn = dialog?.querySelector('.qr-close');
+    console.log('Close button found:', closeBtn);
+    
+    if (!contactBtn || !dialog || !closeBtn) {
+        console.error('Contact button or dialog elements not found:', {
+            contactBtn: !!contactBtn,
+            dialog: !!dialog,
+            closeBtn: !!closeBtn
+        });
+        return;
+    }
+
+    console.log('All dialog elements found, setting up event listeners');
+
+    // 显示对话框
+    const showDialog = () => {
+        console.log('Showing dialog');
+        dialog.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
+
+    // 隐藏对话框
+    const hideDialog = () => {
+        console.log('Hiding dialog');
+        dialog.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    // 点击联系按钮显示对话框
+    contactBtn.addEventListener('click', (e) => {
+        console.log('Contact button clicked');
+        e.preventDefault();
+        showDialog();
+    });
+
+    // 点击关闭按钮关闭对话框
+    closeBtn.addEventListener('click', (e) => {
+        console.log('Close button clicked');
+        e.preventDefault();
+        hideDialog();
+    });
+
+    // 点击对话框背景关闭对话框
+    dialog.addEventListener('click', (e) => {
+        if (e.target === dialog) {
+            console.log('Dialog background clicked');
+            hideDialog();
+        }
+    });
+
+    // 按ESC键关闭对话框
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && dialog.classList.contains('active')) {
+            console.log('ESC key pressed');
+            hideDialog();
+        }
+    });
+
+    // 鼠标移入移动时添加 hovering 类并设置位置
+    contactBtn.addEventListener('mousemove', (e) => {
+        const rect = contactBtn.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        contactBtn.style.setProperty('--x', `${x}px`);
+        contactBtn.style.setProperty('--y', `${y}px`);
+        contactBtn.classList.add('hovering');
+    });
+
+    // 鼠标离开时延迟移除 hovering 类以平滑淡出
+    contactBtn.addEventListener('mouseleave', () => {
+        setTimeout(() => {
+            contactBtn.classList.remove('hovering');
+        }, 300); // 与 CSS 动画一致
+    });
+
+
+    console.log('Contact dialog setup complete');
 }
   

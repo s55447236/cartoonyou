@@ -1,57 +1,76 @@
 # CartoonYou
 
-CartoonYou 是一个基于 AI 技术的照片卡通化服务，能够将您的照片转换成独特的卡通风格头像。
+CartoonYou is a web application that transforms your photos into cartoon-style avatars using AI technology.
 
 🌐 [在线预览](https://s55447236.github.io/cartoonyou/)
 
-## 功能特点
+## Features
 
-- 多种卡通风格选择
-- 实时预览效果
-- 支持表情动画
-- 快速生成和下载
-- 用户友好的界面
+- AI-powered cartoon avatar generation
+- Multiple art styles to choose from
+- Expressive emotions and animations
+- Easy-to-use interface
+- Instant preview and download
 
-## 技术栈
+## Technologies Used
 
 - HTML5
 - CSS3
-- JavaScript
-- 响应式设计
+- JavaScript (Vanilla)
+- Modern CSS animations and transitions
+- Responsive design
 
-## 项目结构
+## Getting Started
 
-```
-cartoonme/
-├── images/          # 图片资源
-├── styles/          # CSS样式文件
-├── scripts/         # JavaScript文件
-├── index.html      # 主页
-├── about.html      # 关于页面
-├── privacy.html    # 隐私政策
-└── terms.html      # 服务条款
-```
-
-## 开始使用
-
-1. 克隆仓库
+1. Clone the repository
 
 ```bash
 git clone https://github.com/yourusername/cartoonme.git
 ```
 
-2. 打开项目
+2. Open the project folder
 
 ```bash
 cd cartoonme
 ```
 
-3. 在浏览器中打开 `index.html` 文件
+3. Open `index.html` in your browser or use a local server
 
-## 贡献
+```bash
+# Using Python 3
+python -m http.server 5500
+```
 
-欢迎提交 Pull Request 或创建 Issue。
+4. Visit `http://localhost:5500` in your browser
 
-## 许可证
+## Project Structure
 
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+```
+cartoonme/
+├── index.html          # Main HTML file
+├── styles.css         # Main CSS styles
+├── script.js         # JavaScript functionality
+├── images/           # Image assets
+│   ├── avatars/     # Avatar images
+│   ├── emotion/     # Emotion icons
+│   └── qr/          # QR code images
+├── animations/      # Animation files
+└── README.md       # Project documentation
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+- Your Name - [@yourusername](https://github.com/yourusername)
+- Project Link: [https://github.com/yourusername/cartoonme](https://github.com/yourusername/cartoonme)

@@ -634,6 +634,7 @@ p {
     position: relative;
 }
 
+/* Contact Button Styles */
 .contact-btn {
     background: #333;
     color: white;
@@ -645,6 +646,157 @@ p {
     justify-content: center;
     margin: 3rem auto;
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    transition: transform 0.3s ease;
+}
+
+.contact-btn:hover {
+    transform: scale(1.05);
+}
+
+.contact-btn::before {
+    content: '';
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 60px;
+    height: 60px;
+    background: #FFD700;
+    border-radius: 50%;
+    transform: scale(0.3);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    pointer-events: none;
+  }
+  
+.contact-btn.hovering::before {
+    opacity: 0.8;
+    transform: scale(3);
+ }
+.contact-btn span {
+    position: relative;
+    z-index: 1;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* QR Code Dialog Styles */
+.qr-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.qr-dialog.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.qr-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    position: relative;
+    transform: scale(0.8);
+    transition: transform 0.3s ease;
+    max-width: 90%;
+    width: 600px;
+}
+
+.qr-dialog.active .qr-content {
+    transform: scale(1);
+}
+
+.qr-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.qr-close:hover {
+    background: #eee;
+}
+
+.qr-close svg {
+    width: 14px;
+    height: 14px;
+    color: #333;
+}
+
+.qr-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--primary-color);
+    font-size: 1.5em;
+}
+
+.qr-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.qr-item {
+    text-align: center;
+}
+
+.qr-item img {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.qr-item p {
+    color: var(--primary-color);
+    font-weight: 500;
+    margin: 0;
+}
+
+.qr-item span {
+    color: var(--secondary-color);
+    font-size: 0.9em;
+    display: block;
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .qr-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .qr-content {
+        padding: 30px 20px;
+    }
+    
+    .qr-item img {
+        width: 180px;
+        height: 180px;
+    }
 }
 
 /* Footer */
@@ -887,140 +1039,5 @@ footer {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-/* 隐私政策页面样式 */
-.privacy-page {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 40px 20px;
-}
-
-.privacy-section {
-    background: #fff;
-    border-radius: 12px;
-    padding: 40px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.privacy-section h1 {
-    font-size: 2.2em;
-    color: #333;
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-.privacy-content {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
-}
-
-.privacy-block {
-    margin-bottom: 30px;
-}
-
-.privacy-block h2 {
-    color: #2c3e50;
-    margin-bottom: 15px;
-    font-size: 1.5em;
-}
-
-.privacy-block p {
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 15px;
-}
-
-.privacy-block ul {
-    list-style-type: disc;
-    margin-left: 20px;
-    color: #666;
-}
-
-.privacy-block li {
-    margin-bottom: 10px;
-    line-height: 1.5;
-}
-
-/* 服务条款页面样式 */
-.terms-page {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 40px 20px;
-}
-
-.terms-section {
-    background: #fff;
-    border-radius: 12px;
-    padding: 40px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.terms-section h1 {
-    font-size: 2.2em;
-    color: #333;
-    margin-bottom: 30px;
-    text-align: center;
-}
-
-.terms-content {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 30px;
-}
-
-.terms-block {
-    margin-bottom: 30px;
-}
-
-.terms-block h2 {
-    color: #2c3e50;
-    margin-bottom: 15px;
-    font-size: 1.5em;
-}
-
-.terms-block p {
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 15px;
-}
-
-.terms-block ul {
-    list-style-type: disc;
-    margin-left: 20px;
-    color: #666;
-}
-
-.terms-block li {
-    margin-bottom: 10px;
-    line-height: 1.5;
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-    .about-page,
-    .privacy-page,
-    .terms-page {
-        padding: 20px 15px;
-    }
-
-    .about-section,
-    .privacy-section,
-    .terms-section {
-        padding: 20px;
-    }
-
-    .about-section h1,
-    .privacy-section h1,
-    .terms-section h1 {
-        font-size: 1.8em;
-    }
-
-    .about-block h2,
-    .privacy-block h2,
-    .terms-block h2 {
-        font-size: 1.3em;
-    }
 }
 

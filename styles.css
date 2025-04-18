@@ -888,3 +888,139 @@ footer {
     height: 100%;
     object-fit: cover;
 }
+
+/* 隐私政策页面样式 */
+.privacy-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.privacy-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.privacy-section h1 {
+    font-size: 2.2em;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.privacy-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+.privacy-block {
+    margin-bottom: 30px;
+}
+
+.privacy-block h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.privacy-block p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.privacy-block ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    color: #666;
+}
+
+.privacy-block li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+/* 服务条款页面样式 */
+.terms-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.terms-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.terms-section h1 {
+    font-size: 2.2em;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.terms-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+.terms-block {
+    margin-bottom: 30px;
+}
+
+.terms-block h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.terms-block p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.terms-block ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    color: #666;
+}
+
+.terms-block li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .about-page,
+    .privacy-page,
+    .terms-page {
+        padding: 20px 15px;
+    }
+
+    .about-section,
+    .privacy-section,
+    .terms-section {
+        padding: 20px;
+    }
+
+    .about-section h1,
+    .privacy-section h1,
+    .terms-section h1 {
+        font-size: 1.8em;
+    }
+
+    .about-block h2,
+    .privacy-block h2,
+    .terms-block h2 {
+        font-size: 1.3em;
+    }
+}
+

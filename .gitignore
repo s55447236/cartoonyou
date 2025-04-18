@@ -42,4 +42,18 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
-*.sw? 
+*.sw?
+
+# Editor temporary files
+*.swp
+*.swo
+
+# Dependencies directories
+vendor/
+
+# Environment temporary files
+.cache/
+.temp/
+
+# Other files
+*.log 

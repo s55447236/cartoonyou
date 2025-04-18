@@ -1,0 +1,272 @@
+/* 隐私政策页面样式 */
+.privacy-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.privacy-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.privacy-section h1 {
+    font-size: 2.2em;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.privacy-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+.privacy-block {
+    margin-bottom: 30px;
+}
+
+.privacy-block h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.privacy-block p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.privacy-block ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    color: #666;
+}
+
+.privacy-block li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+/* 服务条款页面样式 */
+.terms-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.terms-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.terms-section h1 {
+    font-size: 2.2em;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.terms-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+.terms-block {
+    margin-bottom: 30px;
+}
+
+.terms-block h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.terms-block p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.terms-block ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    color: #666;
+}
+
+.terms-block li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .about-page,
+    .privacy-page,
+    .terms-page {
+        padding: 20px 15px;
+    }
+
+    .about-section,
+    .privacy-section,
+    .terms-section {
+        padding: 20px;
+    }
+
+    .about-section h1,
+    .privacy-section h1,
+    .terms-section h1 {
+        font-size: 1.8em;
+    }
+
+    .about-block h2,
+    .privacy-block h2,
+    .terms-block h2 {
+        font-size: 1.3em;
+    }
+}
+
+/* 关于页面样式 */
+.about-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.story-section {
+    margin-bottom: 60px;
+}
+
+.story-section h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.story-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+}
+
+.story-intro {
+    font-size: 1.4em;
+    color: #666;
+    text-align: center;
+    margin-bottom: 40px;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.story-block {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.story-block h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.story-block p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* 团队部分样式 */
+.team-section {
+    margin-top: 60px;
+}
+
+.team-section h2 {
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2em;
+    text-align: center;
+}
+
+.founder-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.founder-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.founder-card:hover {
+    transform: translateY(-5px);
+}
+
+.founder-card img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    object-fit: cover;
+}
+
+.founder-card h3 {
+    color: #2c3e50;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.founder-card p {
+    color: #666;
+    line-height: 1.6;
+}
+
+.founder-card p:last-child {
+    color: #999;
+    font-style: italic;
+    margin-top: 15px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .about-page {
+        padding: 20px 15px;
+    }
+
+    .story-section {
+        padding: 20px;
+    }
+
+    .story-section h1 {
+        font-size: 1.8em;
+    }
+
+    .story-intro {
+        font-size: 1.2em;
+    }
+
+    .story-block h2 {
+        font-size: 1.3em;
+    }
+
+    .founder-cards {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 40px auto 0;
+    }
+} 

@@ -1,69 +1,55 @@
 # CartoonYou
 
-将您的照片转换成独特的卡通形象 - 完美适用于头像、表情包等。
+CartoonYou 是一个基于 AI 技术的照片卡通化服务，能够将您的照片转换成独特的卡通风格头像。
 
 ## 功能特点
 
-- 🎨 AI 驱动的卡通头像生成
-- 😊 多种表情动画支持
-- 🎬 支持多种动画格式 (WebP, MP4, WebM)
-- 📱 响应式设计，支持移动端
-- ⚡ 实时预览和编辑
-- 💾 一键下载和分享
+- 多种卡通风格选择
+- 实时预览效果
+- 支持表情动画
+- 快速生成和下载
+- 用户友好的界面
 
 ## 技术栈
 
 - HTML5
-- CSS3 (动画, Flexbox, Grid)
-- JavaScript (原生)
-- 支持现代浏览器的动画格式
-
-## 本地开发
-
-1. 克隆仓库
-
-```bash
-git clone https://github.com/s55447236/cartoonyou.git
-cd cartoonyou
-```
-
-2. 使用本地服务器运行项目
-
-```bash
-# 如果你有 Python
-python -m http.server 8000
-
-# 或者使用 Node.js 的 http-server
-npx http-server
-```
-
-3. 在浏览器中访问 `http://localhost:8000`
+- CSS3
+- JavaScript
+- 响应式设计
 
 ## 项目结构
 
 ```
-cartoonyou/
-├── animations/       # 动画文件 (WebP, MP4, WebM)
-├── images/          # 静态图片资源
-│   ├── avatars/     # 示例头像
-│   ├── emotion/     # 表情图标
-│   └── icon/        # UI图标
-├── index.html       # 主页面
-├── styles.css       # 样式文件
-└── script.js        # JavaScript逻辑
+cartoonme/
+├── images/          # 图片资源
+├── styles/          # CSS样式文件
+├── scripts/         # JavaScript文件
+├── index.html      # 主页
+├── about.html      # 关于页面
+├── privacy.html    # 隐私政策
+└── terms.html      # 服务条款
 ```
 
-## 浏览器支持
+## 开始使用
 
-- Chrome (推荐)
-- Firefox
-- Safari
-- Edge
+1. 克隆仓库
+
+```bash
+git clone https://github.com/yourusername/cartoonme.git
+```
+
+2. 打开项目
+
+```bash
+cd cartoonme
+```
+
+3. 在浏览器中打开 `index.html` 文件
 
 ## 贡献
 
-欢迎提交 Issue 和 Pull Request！
+欢迎提交 Pull Request 或创建 Issue。
 
-## 许可
+## 许可证
 
-MIT License
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。

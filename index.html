@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CartoonYou</title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
     <!-- 导航栏 -->
@@ -33,7 +35,7 @@
       <div class="loved-by">
         <span>Loved by 2,000+ creators</span>
       </div>
-      <div class="hero-content">
+    <div class="hero-content">
         <h1>Turn yourself<br>into a cartoon hero</h1>
         <p>Upload a photo and turn yourself into a one-of-a-kind<br>cartoon — perfect for avatars, stickers, and more.</p>
         <div class="upload-container">
@@ -91,6 +93,7 @@
     <section class="step">
         <div class="step-titil">
             <h2>Step 1: Upload a Clear Photo</h2>
+            <p>Upper-body, front-facing, well-lit for best result</p>
         </div>
         <div class="photo-requirements">
             <div class="photo-requirements-grid">
@@ -117,12 +120,22 @@
                     </div>
                 </div>
             </div>
-        <div class="upload-container">
-            <input type="file" id="stepUpload" class="file-input" accept="image/*" />
-            <button class="primary-btn" onclick="document.getElementById('stepUpload').click()">Upload Photo</button>
+            <div class="upload-section">
+                <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                <button class="upload-btn" onclick="document.getElementById('photoInput').click()">Upload Photo</button>
+            </div>
+            <!-- 预览区域移到这里 -->
+            <div id="previewSection" style="display: none;">
+                <div class="uploaded-image-container">
+                    <img id="uploadedImage" src="" alt="Uploaded photo">
+                    <div class="loading-overlay">
+                        <div class="loading-text">正在上传...</div>
+                        <button class="reupload-btn">重新上传</button>
+                    </div>
+                </div>
+                <button class="primary-btn" id="nextStepBtn">Create your cartoon character</button>
+            </div>
         </div>
-      </div>
-      
     </section>
 
     <!-- 样式选择部分 -->
@@ -132,7 +145,7 @@
             <p>Ready? Pick your favorite look</p>
         </div>
         <div class="style-grid">
-            <div class="style-card active">
+            <div class="style-card">
                 <div class="card-image">
                     <img src="images/result1.png" alt="Result 1" class="result-img">
                     <div class="loading-overlay">
@@ -200,8 +213,8 @@
                         </button>
                     </div>
                 </div>
-            </div>
-        </div>
+    </div>
+    </div>
         
         <div class="step-titil">
             <p>Pick up to 3 expressions you'd like to animate.</p>
@@ -258,9 +271,7 @@
         </div>
         <div class="result-grid">
             <div class="result-card">
-                <div class="result-media">
-                    <img src="animations/result1.webp" onerror="this.parentElement.innerHTML='<video autoplay loop muted playsinline><source src=\'animations/result1.webm\' type=\'video/webm\'><source src=\'animations/result1.mp4\' type=\'video/mp4\'></video>'">
-                </div>
+                <div class="result-media"></div>
                 <div class="card-actions">
                     <button class="action-btn retry">
                         <svg width="37" height="37" viewBox="0 0 37 37" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -281,9 +292,7 @@
                 </div>
             </div>
             <div class="result-card">
-                <div class="result-media">
-                    <img src="animations/result2.webp" onerror="this.parentElement.innerHTML='<video autoplay loop muted playsinline><source src=\'animations/result2.webm\' type=\'video/webm\'><source src=\'animations/result2.mp4\' type=\'video/mp4\'></video>'">
-                </div>
+                <div class="result-media"></div>
                 <div class="card-actions">
                     <button class="action-btn retry">
                         <svg width="37" height="37" viewBox="0 0 37 37" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -304,9 +313,7 @@
                 </div>
             </div>
             <div class="result-card">
-                <div class="result-media">
-                    <img src="animations/result3.webp" onerror="this.parentElement.innerHTML='<video autoplay loop muted playsinline><source src=\'animations/result3.webm\' type=\'video/webm\'><source src=\'animations/result3.mp4\' type=\'video/mp4\'></video>'">
-                </div>
+                <div class="result-media"></div>
                 <div class="card-actions">
                     <button class="action-btn retry">
                         <svg width="37" height="37" viewBox="0 0 37 37" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -328,7 +335,7 @@
             </div>
         </div>
         <div class="animation-result">
-            <button class="primary-btn generate-btn">Download</button>
+            <button class="primary-btn generate-btn">Download All</button>
         </div>
     </section>
 

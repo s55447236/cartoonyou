@@ -59,6 +59,10 @@ function setupStyleCards() {
     styleCards.forEach(card => {
         // 点击卡片的处理
         card.addEventListener('click', () => {
+            // 如果点击的是当前选中的卡片，不做任何操作
+            if (card.classList.contains('active')) {
+                return;
+            }
             // 移除其他卡片的选中状态
             styleCards.forEach(c => c.classList.remove('active'));
             // 添加当前卡片的选中状态
@@ -888,6 +892,11 @@ async function goToNextStep() {
                                         animationResult.style.opacity = '1';
                                         animationResult.style.pointerEvents = 'auto';
                                     }
+
+                                    // 默认选中中间的卡片
+                                    if (styleCards.length >= 2) {
+                                        styleCards[1].classList.add('active');
+                                    }
                                 }
                             }, 200);
                         }
@@ -926,6 +935,11 @@ async function goToNextStep() {
                 resultImg.style.opacity = '1';
             }
         });
+
+        // 错误情况下也确保中间卡片被选中
+        if (styleCards.length >= 2) {
+            styleCards[1].classList.add('active');
+        }
     }
 }
 

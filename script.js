@@ -51,6 +51,11 @@ function initializeAvatars() {
 function setupStyleCards() {
     const styleCards = document.querySelectorAll('.style-card');
     
+    // 默认选中中间的卡片
+    if (styleCards.length >= 2) {
+        styleCards[1].classList.add('active');
+    }
+    
     styleCards.forEach(card => {
         // 点击卡片的处理
         card.addEventListener('click', () => {
@@ -161,31 +166,52 @@ function setupScrollAnimations() {
  */
 function setupEmotions() {
     const emotions = document.querySelectorAll('.emotion');
-    const maxSelect = 3; // 最多选择3个表情
-    let selectedEmotions = []; // 存储已选择的表情
+    const expandBtn = document.querySelector('.expand-btn');
+    const emotionsExpanded = document.querySelector('.emotions-expanded');
+    let selectedEmotions = Array.from(document.querySelectorAll('.emotion.active')).map(el => el.dataset.emotion);
 
+    // 处理展开/收起按钮
+    if (expandBtn && emotionsExpanded) {
+        // 获取按钮中的文本节点
+        const textNode = Array.from(expandBtn.childNodes).find(node => node.nodeType === 3);
+        
+        expandBtn.addEventListener('click', () => {
+            const isExpanded = emotionsExpanded.classList.contains('expanded');
+            if (isExpanded) {
+                emotionsExpanded.classList.remove('expanded');
+                expandBtn.classList.remove('expanded');
+                if (textNode) textNode.textContent = 'More';
+            } else {
+                emotionsExpanded.classList.add('expanded');
+                expandBtn.classList.add('expanded');
+                if (textNode) textNode.textContent = 'Hide';
+            }
+        });
+    }
+
+    // 处理表情点击
     emotions.forEach(emotion => {
         emotion.addEventListener('click', () => {
-            const isActive = emotion.classList.contains('active');
+            const emotionType = emotion.dataset.emotion;
             
-            if (isActive) {
-                // 如果已经激活，则取消选择
+            if (emotion.classList.contains('active')) {
+                // 如果已经选中，则取消选中
                 emotion.classList.remove('active');
-                selectedEmotions = selectedEmotions.filter(e => e !== emotion);
+                selectedEmotions = selectedEmotions.filter(type => type !== emotionType);
             } else {
-                // 如果未激活，检查是否超过最大选择数量
-                if (selectedEmotions.length >= maxSelect) {
-                    // 移除最早选择的表情
-                    const firstSelected = selectedEmotions.shift();
-                    firstSelected.classList.remove('active');
+                // 如果未选中，检查是否已达到最大选择数量
+                if (selectedEmotions.length >= 3) {
+                    // 移除最早选中的表情
+                    const firstSelected = document.querySelector(`.emotion[data-emotion="${selectedEmotions[0]}"]`);
+                    if (firstSelected) {
+                        firstSelected.classList.remove('active');
+                    }
+                    selectedEmotions.shift();
                 }
-                // 添加新选择的表情
+                // 添加新选中的表情
                 emotion.classList.add('active');
-                selectedEmotions.push(emotion);
+                selectedEmotions.push(emotionType);
             }
-
-            // 可以在这里添加选择变化的回调
-            console.log('当前选择的表情数量:', selectedEmotions.length);
         });
     });
 }
@@ -218,8 +244,6 @@ class FileUploadHandler {
      */
     handleFileSelect(event) {
         const file = event.target.files[0];
-        const uploadBtn = event.target.parentElement.querySelector('.primary-btn');
-        
         if (!file) return;
 
         // 验证文件类型
@@ -236,43 +260,30 @@ class FileUploadHandler {
             return;
         }
 
+        // 找到上传步骤部分
+        const uploadSection = Array.from(document.querySelectorAll('.step')).find(section => {
+            const title = section.querySelector('h2');
+            return title && title.textContent.includes('Step 1: Upload a Clear Photo');
+        });
 
-        // 处理文件上传
-        this.uploadFile(file, uploadBtn);
-    }
+        if (uploadSection) {
+            // 滚动到上传部分
+            const offset = 80;
+            const elementPosition = uploadSection.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - offset;
 
-    /**
-     * 上传文件
-     * @param {File} file - 要上传的文件
-     * @param {HTMLElement} uploadBtn - 上传按钮元素
-     */
-    async uploadFile(file, uploadBtn) {
-        const formData = new FormData();
-        formData.append('photo', file);
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
 
-        try {
-            // 模拟上传延迟
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            // TODO: 实现实际的文件上传逻辑
-            // const response = await fetch('/api/upload', {
-            //     method: 'POST',
-            //     body: formData
-            // });
-
-            // 更新按钮状态
-            uploadBtn.textContent = 'Upload Complete!';
-            setTimeout(() => {
-                uploadBtn.textContent = 'Upload Photo';
-                uploadBtn.classList.remove('uploading');
-            }, 2000);
-        } catch (error) {
-            console.error('Upload failed:', error);
-            uploadBtn.textContent = 'Upload Failed';
-            uploadBtn.classList.remove('uploading');
-        setTimeout(() => {
-                uploadBtn.textContent = 'Upload Photo';
-            }, 2000);
+            // 触发文件上传
+            const photoInput = document.getElementById('photoInput');
+            if (photoInput) {
+                photoInput.files = event.target.files;
+                const changeEvent = new Event('change');
+                photoInput.dispatchEvent(changeEvent);
+            }
         }
     }
 }
@@ -290,13 +301,6 @@ function setupAnimationGeneration() {
     }
 
     generateBtn.addEventListener('click', async () => {
-        // 检查是否选择了形象
-        const selectedStyle = document.querySelector('.style-card.active');
-        if (!selectedStyle) {
-            alert('请选择一个形象');
-            return;
-        }
-
         // 检查是否选择了表情
         const selectedEmotions = document.querySelectorAll('.emotions-preview .emotion.active');
         if (selectedEmotions.length === 0) {
@@ -304,7 +308,7 @@ function setupAnimationGeneration() {
             return;
         }
 
-        // 查找包含"Hey there! Your cartoon version is all set!"的section
+        // 查找结果展示区域
         const resultSection = Array.from(document.querySelectorAll('.step')).find(section => {
             const title = section.querySelector('h2');
             return title && title.textContent.includes('Hey there! Your cartoon version is all set!');
@@ -325,54 +329,55 @@ function setupAnimationGeneration() {
             behavior: 'smooth'
         });
 
-        // 为每个卡片创建独立的加载过程
-        resultCards.forEach((card, index) => {
-            const mediaContainer = card.querySelector('.result-media');
-            const loadingOverlay = card.querySelector('.loading-overlay');
+        // 获取标题和副标题元素
+        const titleElement = resultSection.querySelector('h2');
+        const subtitleElement = resultSection.querySelector('p');
+
+        // 保存原始文案
+        const originalTitle = titleElement.textContent;
+        const originalSubtitle = subtitleElement.textContent;
+
+        // 更改为加载状态的文案
+        titleElement.textContent = '正在创建表情包，请稍后';
+        subtitleElement.style.opacity = '0';
+
+        // 为所有结果卡片添加加载状态
+        resultCards.forEach(card => {
+            card.classList.add('loading');
             const progressBar = card.querySelector('.progress');
             const progressText = card.querySelector('.progress-text');
-            
-            // 清空现有内容并显示loading状态
-            if (mediaContainer) {
-                mediaContainer.innerHTML = '';
-                mediaContainer.style.backgroundColor = '#4A4A4A';
-            }
-            
-            card.classList.add('loading');
             if (progressBar) progressBar.style.width = '0%';
             if (progressText) progressText.textContent = '0%';
-
-            // 设置延迟开始时间
-            setTimeout(() => {
-                let progress = 0;
-                const interval = setInterval(() => {
-                    progress += Math.random() * 3;
-                    if (progress >= 100) {
-                        progress = 100;
-                        clearInterval(interval);
-                        
-                        // 更新媒体内容
-                        if (mediaContainer) {
-                            mediaContainer.style.backgroundColor = '';
-                            const videoSrc = `animations/result${index + 1}`;
-                            mediaContainer.innerHTML = `
-                                <video autoplay loop muted playsinline>
-                                    <source src="${videoSrc}.webm" type="video/webm">
-                                    <source src="${videoSrc}.mp4" type="video/mp4">
-                                </video>
-                            `;
-                        }
-                        
-                        setTimeout(() => {
-                            card.classList.remove('loading');
-                        }, 500);
-                    }
-                    
-                    if (progressBar) progressBar.style.width = `${progress}%`;
-                    if (progressText) progressText.textContent = `${Math.round(progress)}%`;
-                }, 100);
-            }, index * 800);
         });
+
+        // 模拟3秒加载过程
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 100/30; // 3秒完成
+            if (progress >= 100) {
+                clearInterval(interval);
+                progress = 100;
+                
+                // 加载完成后恢复原始文案
+                setTimeout(() => {
+                    titleElement.textContent = originalTitle;
+                    subtitleElement.style.opacity = '1';
+                    
+                    // 移除所有卡片的加载状态
+                    resultCards.forEach(card => {
+                        card.classList.remove('loading');
+                    });
+                }, 200);
+            }
+            
+            // 更新所有卡片的进度条
+            resultCards.forEach(card => {
+                const progressBar = card.querySelector('.progress');
+                const progressText = card.querySelector('.progress-text');
+                if (progressBar) progressBar.style.width = `${progress}%`;
+                if (progressText) progressText.textContent = `${Math.round(progress)}%`;
+            });
+        }, 100);
     });
 }
 
@@ -491,19 +496,6 @@ function setupDownloadButtons() {
             }
         });
     }
-
-    // 设置表情预览的下载功能
-    document.querySelectorAll('.emotion').forEach(emotion => {
-        emotion.addEventListener('dblclick', () => {
-            const img = emotion.querySelector('img');
-            const span = emotion.querySelector('span');
-            if (img && span) {
-                const emotionName = span.textContent;
-                const filename = `cartoon-emotion-${emotionName.toLowerCase()}.png`;
-                downloadImage(img.src, filename);
-            }
-        });
-    });
 
     // 设置结果网格的下载按钮
     document.querySelectorAll('.result-card .action-btn').forEach(btn => {
@@ -678,8 +670,24 @@ async function handlePhotoUpload(event) {
     const uploadedImage = document.getElementById('uploadedImage');
     const previewSection = document.getElementById('previewSection');
     const nextStepBtn = document.getElementById('nextStepBtn');
-    const loadingText = document.querySelector('.loading-overlay .loading-text');
-    const loadingOverlay = document.querySelector('.loading-overlay');
+
+    // 创建 LoadingOverlay 实例
+    const loadingOverlay = new LoadingOverlay({
+        text: '正在上传...',
+        showProgress: true,
+        showReuploadButton: true,
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        textColor: '#333'
+    });
+
+    // 设置重新上传按钮事件
+    loadingOverlay.onReupload(() => {
+        const fileInput = document.getElementById('photoInput');
+        if (fileInput) {
+            fileInput.value = '';
+            fileInput.click();
+        }
+    });
 
     // 禁用创建按钮
     if (nextStepBtn) {
@@ -699,8 +707,11 @@ async function handlePhotoUpload(event) {
     // 显示图片容器和预览区域
     imageContainer.style.display = 'block';
     previewSection.style.display = 'block';
-    imageContainer.classList.add('show', 'loading');
-    loadingOverlay.classList.add('uploading');
+    
+    // 挂载并显示加载遮罩
+    loadingOverlay.mount(imageContainer);
+    loadingOverlay.show();
+    loadingOverlay.hideReuploadButton(); // 上传过程中隐藏重新上传按钮
     
     try {
         // 创建预览
@@ -716,17 +727,17 @@ async function handlePhotoUpload(event) {
                     clearInterval(interval);
                     progress = 100;
                 }
-                loadingText.textContent = `正在上传...${Math.min(Math.round(progress), 100)}%`;
+                loadingOverlay.updateProgress(progress);
             }, 100);
 
             // 等待3秒模拟上传
             await new Promise(resolve => setTimeout(resolve, 3000));
             
             // 上传完成
-            loadingText.textContent = '上传完成！';
+            loadingOverlay.updateText('上传完成！');
             setTimeout(() => {
-                imageContainer.classList.remove('loading');
-                loadingOverlay.classList.remove('uploading');
+                loadingOverlay.hide();
+                loadingOverlay.showReuploadButton();
                 // 启用创建按钮
                 if (nextStepBtn) {
                     nextStepBtn.disabled = false;
@@ -738,14 +749,14 @@ async function handlePhotoUpload(event) {
     } catch (error) {
         console.error('Upload failed:', error);
         // 处理错误情况
-        imageContainer.classList.remove('show', 'loading');
-        loadingOverlay.classList.remove('uploading');
+        loadingOverlay.hide();
         uploadButton.style.display = 'block';
         if (photoRequirementsGrid) {
             photoRequirementsGrid.style.display = 'flex';
             photoRequirementsGrid.style.opacity = '1';
         }
-        loadingText.textContent = '上传失败，请重试';
+        loadingOverlay.updateText('上传失败，请重试');
+        loadingOverlay.showReuploadButton();
         // 隐藏创建按钮
         if (nextStepBtn) {
             nextStepBtn.style.display = 'none';

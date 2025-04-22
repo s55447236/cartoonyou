@@ -389,49 +389,48 @@ p {
 .style-grid {
     display: flex;
     justify-content: center;
-    gap: 1rem;
-    margin: 3rem 0;
     position: relative;
+    scroll-margin-top: 100px;
 }
 
 .style-card {
-    width: 270px;
-    height: 310px;
-    border-radius: 32px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    border: 3px solid transparent;
+  width: 280px;
+  height: 280px;
+  border-radius: 32px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  border: 3px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .style-card .card-image {
-    width: 100%;
-    height: 100%;
-    position: relative;
+  width: 270px;
+  height: 310px;
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
 }
 
 .style-card .result-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: opacity 0.3s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 32px;
 }
 
 .card-actions {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    background: rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 2;
+  position: absolute;
+  inset: 0; /* 等价于 top: 0; left: 0; width: 100%; height: 100% */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
 }
 
 .style-card:hover .card-actions {
@@ -530,76 +529,165 @@ p {
 }
 
 .emotions-preview {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin: 2rem 0;
-    flex-wrap: wrap;
     max-width: 1000px;
-    margin: 0 auto;
-    position: relative;
+    padding: 0 20px;
+}
+
+.emotions-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.emotions-default {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 800px;
+}
+
+.emotions-expanded {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 800px;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.emotions-expanded.expanded {
+    max-height: 1000px;
+    opacity: 1;
 }
 
 .emotion {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 32px 8px 8px;
+    gap: 12px;
+    padding: 8px 16px 8px 8px;
     background: rgba(255, 182, 60, 0.2);
     border-radius: 99px;
     cursor: pointer;
     transition: all 0.3s ease;
     border: 2px solid transparent;
-}
-.emotion:hover {
-    background: rgba(255, 182, 60, 0.3);
     position: relative;
-}
-.emotion.active {
-    background: rgba(255, 182, 60, 0.4);
-    border: 2px solid var(--main-btn-color);
-    position: relative;
-}
-
-.emotion.active::after {
-    content: '';
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
-    width: 28px;
-    height: 28px;
-    background: var(--main-btn-color);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.emotion.active::before {
-    content: '';
-    position: absolute;
-    right: 7px;
-    bottom: 8px;
-    width: 12px;
-    height: 6px;
-    border: 2px solid white;
-    border-top: 0;
-    border-right: 0;
-    transform: translateY(-50%) rotate(-45deg);
-    z-index: 1;
+    min-width: 160px;
+    flex: 0 1 auto;
 }
 
 .emotion img {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
 }
 
 .emotion span {
     color: var(--primary-color);
     font-size: 1rem;
+    font-weight: 500;
     white-space: nowrap;
+}
+
+.emotion.hidden {
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.emotion.active {
+    background: rgba(255, 182, 60, 0.4);
+    border-color: var(--main-btn-color);
+}
+
+.emotion.active::after {
+    content: '';
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background: var(--main-btn-color);
+    border-radius: 50%;
+}
+
+.emotion.active::before {
+    content: '';
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    width: 10px;
+    height: 6px;
+    border: 2px solid white;
+    border-top: 0;
+    border-right: 0;
+    transform: translateY(-70%) rotate(-45deg);
+    z-index: 1;
+}
+
+.emotion:hover {
+    background: rgba(255, 182, 60, 0.3);
+    transform: translateY(-2px);
+}
+
+.expand-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--main-btn-color);
+    border: none;
+    border-radius: 99px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.expand-btn svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+}
+
+.expand-btn.expanded svg {
+    transform: rotate(180deg);
+}
+
+.expand-btn:hover {
+    background: var(--hover-btn-color);
+    transform: scale(1.05);
+}
+
+/* 响应式布局调整 */
+@media (max-width: 768px) {
+    .emotions-default,
+    .emotions-expanded {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0 16px;
+    }
+    
+    .emotion {
+        width: 100%;
+        min-width: 0;
+    }
+    
+    .expand-btn {
+        align-self: center;
+        margin-top: 16px;
+    }
 }
 
 /* Collaboration Section */
@@ -857,7 +945,6 @@ footer {
     flex-direction: column;
     align-items: center;
     gap: 2rem;
-    margin-top: 2rem;
 }
 
 .result-preview {
@@ -1012,18 +1099,21 @@ footer {
 }
 
 .uploaded-image-container {
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-    margin: 20px auto;
-    display: none;
+  width: 210px;
+  height: 240px;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .uploaded-image-container img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .loading-overlay {
@@ -1032,73 +1122,75 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.7);
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    border-radius: 8px;
+    justify-content: center;
+    gap: 12px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: all 0.3s ease;
+    z-index: 3;
+    border-radius: inherit;
 }
 
-/* 上传中状态 */
-.uploaded-image-container.loading .loading-overlay {
+/* 加载状态下的loading-overlay */
+.loading .loading-overlay {
     opacity: 1;
     visibility: visible;
 }
 
-/* hover状态，但不在上传中 */
+/* 进度条样式 */
+.loading-overlay .progress-bar {
+    width: 80%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.loading-overlay .progress {
+    width: 0%;
+    height: 100%;
+    background: var(--main-btn-color);
+    transition: width 0.3s ease;
+}
+
+.loading-overlay .progress-text {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* 特殊情况：上传图片时的loading-overlay */
+.uploaded-image-container .loading-overlay {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.uploaded-image-container .loading-overlay .loading-text {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 15px;
+    display: none;
+}
+
+.uploaded-image-container.loading .loading-overlay .loading-text {
+    display: block;
+}
+
+/* hover状态下的loading-overlay（用于上传图片容器） */
 .uploaded-image-container:not(.loading):hover .loading-overlay {
     opacity: 1;
     visibility: visible;
     background: rgba(0, 0, 0, 0.5);
 }
 
-.loading-text {
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 15px;
+.uploaded-image-container:not(.loading):hover .loading-overlay .loading-text {
     display: none;
 }
 
-/* 上传中时显示加载文本 */
-.uploaded-image-container.loading .loading-text {
-    display: block;
-}
 
-/* hover且不在上传中时隐藏加载文本 */
-.uploaded-image-container:not(.loading):hover .loading-text {
-    display: none;
-}
-
-.reupload-btn {
-    padding: 8px 20px;
-    background: var(--main-btn-color);
-    border: none;
-    border-radius: 99px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    color: black;
-    transition: all 0.3s ease;
-    opacity: 0;
-    transform: translateY(10px);
-    display: none;
-}
-
-/* 非上传状态下的hover显示重新上传按钮 */
-.uploaded-image-container:not(.loading):hover .reupload-btn {
-    opacity: 1;
-    transform: translateY(0);
-    display: block;
-}
-
-.reupload-btn:hover {
-    background: var(--hover-btn-color);
-    transform: scale(1.05);
-}
 
 .upload-btn {
     background: var(--main-btn-color);
@@ -1153,7 +1245,7 @@ footer {
 }
 
 #previewSection {
-    border-radius: 20px;
+    border-radius: 32px;
     transition: all 0.3s ease;
 
     margin-top: -48px;
@@ -1172,9 +1264,9 @@ footer {
 .reupload-btn {
     background: var(--main-btn-color);
     color: #000;
-    padding: 12px 24px;
+    padding: 20px 24px;
     border: none;
-    border-radius: 25px;
+    border-radius: 99px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
@@ -1184,12 +1276,12 @@ footer {
 }
 
 .reupload-btn:hover {
-    background: var(--hover-btn-color);
+    background:var(--hover-btn-color);
     transform: scale(1.05);
 }
 
 .tooltip {
-    position: absolute;
+    position: fixed;
     background: #fff;
     padding: 8px 16px;
     border-radius: 8px;
@@ -1204,28 +1296,16 @@ footer {
     pointer-events: none;
 }
 
-.tooltip::after {
-    content: '';
+.tooltip.style-tooltip {
     position: absolute;
-    bottom: -6px;
+    top: -40px;
     left: 50%;
     transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-top: 6px solid #fff;
 }
 
 .tooltip.show {
     opacity: 1;
     visibility: visible;
-}
-
-.tooltip.style-tooltip {
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 .tooltip.emotion-tooltip {
@@ -1234,13 +1314,7 @@ footer {
     transform: translateX(-50%);
 }
 
-.style-grid {
-    position: relative;
-}
 
-.emotions-preview {
-    position: relative;
-}
 
 .create-cartoon-btn {
     position: absolute;
@@ -1444,6 +1518,14 @@ footer {
 
 /* 加载状态下隐藏操作按钮 */
 .result-card.loading .card-actions {
+    display: none;
+}
+
+.uploaded-image-container .loading-overlay .reupload-btn {
+    display: block;
+}
+
+.uploaded-image-container.loading .loading-overlay .reupload-btn {
     display: none;
 }
 

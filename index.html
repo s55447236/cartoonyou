@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="components/LoadingOverlay.js"></script>
 </head>
 <body>
     <!-- 导航栏 -->
@@ -40,7 +41,7 @@
         <p>Upload a photo and turn yourself into a one-of-a-kind<br>cartoon — perfect for avatars, stickers, and more.</p>
         <div class="upload-container">
           <input type="file" id="heroUpload" class="file-input" accept="image/*" />
-          <button class="primary-btn" onclick="document.getElementById('heroUpload').click()">Upload Photo</button>
+          <button class="primary-btn" >Upload Photo</button>
         </div>
         <div class="try-free">Try it now · It's fun and free!</div>
       </div>
@@ -128,10 +129,6 @@
             <div id="previewSection" style="display: none;">
                 <div class="uploaded-image-container">
                     <img id="uploadedImage" src="" alt="Uploaded photo">
-                    <div class="loading-overlay">
-                        <div class="loading-text">正在上传...</div>
-                        <button class="reupload-btn">重新上传</button>
-                    </div>
                 </div>
                 <button class="primary-btn" id="nextStepBtn">Create your cartoon character</button>
             </div>
@@ -142,7 +139,7 @@
     <section class="step">
         <div class="step-titil">
             <h2>Step 2: Pick your style</h2>
-            <p>Ready? Pick your favorite look</p>
+            <p>Ready? Let's bring them to life!</p>
         </div>
         <div class="style-grid">
             <div class="style-card">
@@ -216,46 +213,57 @@
     </div>
     </div>
         
-        <div class="step-titil">
-            <p>Pick up to 3 expressions you'd like to animate.</p>
-            <p>Let's bring them to life!</p>
-        </div>
+       
         <div class="emotions-preview">
-            <div class="emotion" data-emotion="happy">
-                <img src="images/emotion/happy.png" alt="Happy">
-                <span>Happy</span>
-            </div>
-            <div class="emotion" data-emotion="angry">
-                <img src="images/emotion/angry.png" alt="Angry">
-                <span>Angry</span>
-            </div>
-            <div class="emotion" data-emotion="sad">
-                <img src="images/emotion/sad.png" alt="Sad">
-                <span>Sad</span>
-            </div>
-            <div class="emotion" data-emotion="in-love">
-                <img src="images/emotion/in-love.png" alt="In Love">
-                <span>In Love</span>
-            </div>
-            <div class="emotion" data-emotion="cool">
-                <img src="images/emotion/cool.png" alt="Cool">
-                <span>Cool</span>
-            </div>
-            <div class="emotion" data-emotion="thumbs-up">
-                <img src="images/emotion/thumbs-up.png" alt="Thumbs-up">
-                <span>Thumbs-up</span>
-            </div>
-            <div class="emotion" data-emotion="waving">
-                <img src="images/emotion/waving.png" alt="Waving">
-                <span>Waving</span>
-            </div>
-            <div class="emotion" data-emotion="doubt">
-                <img src="images/emotion/doubt.png" alt="Doubt">
-                <span>Doubt</span>
-            </div>
-            <div class="emotion" data-emotion="worry">
-                <img src="images/emotion/worry.png" alt="Worry">
-                <span>Worry</span>
+            <div class="emotions-grid">
+                <!-- 第一部分：默认表情和更多按钮 -->
+                <div class="emotions-default">
+                    <div class="emotion active" data-emotion="happy">
+                        <img src="images/emotion/happy.png" alt="Happy">
+                        <span>Happy</span>
+                    </div>
+                    <div class="emotion active" data-emotion="angry">
+                        <img src="images/emotion/angry.png" alt="Angry">
+                        <span>Angry</span>
+                    </div>
+                    <div class="emotion active" data-emotion="sad">
+                        <img src="images/emotion/sad.png" alt="Sad">
+                        <span>Sad</span>
+                    </div>
+                    <button class="expand-btn">
+                        More
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <!-- 第二部分：更多表情 -->
+                <div class="emotions-expanded">
+                    <div class="emotion" data-emotion="in-love">
+                        <img src="images/emotion/in-love.png" alt="In Love">
+                        <span>In Love</span>
+                    </div>
+                    <div class="emotion" data-emotion="cool">
+                        <img src="images/emotion/cool.png" alt="Cool">
+                        <span>Cool</span>
+                    </div>
+                    <div class="emotion" data-emotion="thumbs-up">
+                        <img src="images/emotion/thumbs-up.png" alt="Thumbs-up">
+                        <span>Thumbs-up</span>
+                    </div>
+                    <div class="emotion" data-emotion="waving">
+                        <img src="images/emotion/waving.png" alt="Waving">
+                        <span>Waving</span>
+                    </div>
+                    <div class="emotion" data-emotion="doubt">
+                        <img src="images/emotion/doubt.png" alt="Doubt">
+                        <span>Doubt</span>
+                    </div>
+                    <div class="emotion" data-emotion="worry">
+                        <img src="images/emotion/worry.png" alt="Worry">
+                        <span>Worry</span>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="animation-result">

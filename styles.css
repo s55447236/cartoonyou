@@ -40,7 +40,7 @@ p {
     gap: 2rem;
 }
 
-.step-titil {
+.step-title {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -391,25 +391,18 @@ p {
     justify-content: center;
     position: relative;
     scroll-margin-top: 100px;
+    gap: 20px;
 }
 
 .style-card {
-  width: 280px;
-  height: 280px;
+  width: 270px;
+  height: 310px;
   border-radius: 32px;
   overflow: hidden;
   cursor: pointer;
   position: relative;
   border: 3px solid transparent;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.style-card .card-image {
-  width: 270px;
-  height: 310px;
-  border-radius: 32px;
-  overflow: hidden;
-  position: relative;
 }
 
 .style-card .result-img {
@@ -422,7 +415,7 @@ p {
 
 .card-actions {
   position: absolute;
-  inset: 0; /* 等价于 top: 0; left: 0; width: 100%; height: 100% */
+  inset: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -434,129 +427,119 @@ p {
 }
 
 .style-card:hover .card-actions {
-    opacity: 1;
+  opacity: 1;
 }
 
 .action-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: var(--main-btn-color);
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--main-btn-color);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .action-btn:hover {
-    background: var(--hover-btn-color);
-    transform: scale(1.1);
+  background: var(--hover-btn-color);
+  transform: scale(1.1);
 }
 
 .action-btn svg {
-    width: 24px;
-    height: 24px;
+  width: 24px;
+  height: 24px;
 }
 
 .action-btn svg path {
-    stroke: #000;
-    stroke-width: 4;
+  stroke: #000;
+  stroke-width: 4;
 }
 
 /* 加载状态样式 */
 .style-card.loading .card-actions {
-    display: none;
+  display: none;
 }
 
 .style-card .loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    z-index: 3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 3;
 }
 
 .style-card.loading .loading-overlay {
-    opacity: 1;
-    visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
 .style-card.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    width: 48px;
-    height: 48px;
-    background: var(--main-btn-color);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-    transition: background-color 0.3s ease;
+  content: '';
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 48px;
+  height: 48px;
+  background: var(--main-btn-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: background-color 0.3s ease;
 }
 
 /* 加载状态下的选中标记 */
 .style-card.loading.active::after {
-    background: #999;
+  background: #999;
 }
 
 .style-card.active::before {
-    content: '';
-    position: absolute;
-    bottom: 20px;
-    right: 14px;
-    width: 20px;
-    height: 12px;
-    border: 3px solid #fff;
-    border-top: 0;
-    border-right: 0;
-    transform: rotate(-45deg);
-    z-index: 3;
+  content: '';
+  position: absolute;
+  bottom: 20px;
+  right: 14px;
+  width: 20px;
+  height: 12px;
+  border: 3px solid #fff;
+  border-top: 0;
+  border-right: 0;
+  transform: rotate(-45deg);
+  z-index: 3;
 }
 
 .emotions-preview {
-    max-width: 1000px;
-    padding: 0 20px;
-}
-
-.emotions-grid {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    padding: 0;
 }
 
-.emotions-default {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
+.emotions-default,
+.emotions-expanded {
     width: 100%;
-    max-width: 800px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 .emotions-expanded {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-    width: 100%;
-    max-width: 800px;
     overflow: hidden;
     max-height: 0;
     opacity: 0;

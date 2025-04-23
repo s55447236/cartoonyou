@@ -121,13 +121,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="upload-section">
+                <div class="upload-section" >
                     <input type="file" id="photoInput" accept="image/*" style="display: none;">
                     <button class="upload-btn" onclick="document.getElementById('photoInput').click()">Upload Photo</button>
                 </div>
                 <div id="previewSection" style="display: none;">
                     <div class="uploaded-image-container">
                         <img id="uploadedImage" src="" alt="Uploaded photo">
+                        <div class="loading-overlay">
+                            <div class="progress-bar">
+                                <div class="progress"></div>
+                            </div>
+                            <span class="progress-text">0%</span>
+                            <button class="reupload-btn">重新上传</button>
+                        </div>
                     </div>
                     <button class="primary-btn" id="nextStepBtn">Create your cartoon character</button>
                 </div>

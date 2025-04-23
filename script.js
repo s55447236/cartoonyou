@@ -25,6 +25,18 @@ document.addEventListener('DOMContentLoaded', function() {
     if (nextStepBtn) {
         nextStepBtn.addEventListener('click', goToNextStep);
     }
+
+    // 设置重新上传功能
+    const reuploadBtn = document.querySelector('.reupload-btn');
+    if (reuploadBtn) {
+        reuploadBtn.addEventListener('click', function() {
+            const fileInput = document.getElementById('photoInput');
+            if (fileInput) {
+                fileInput.value = '';
+                fileInput.click();
+            }
+        });
+    }
 });
 
 /**
@@ -646,22 +658,6 @@ function setupContactDialog() {
 
 // 文件上传处理
 document.getElementById('photoInput').addEventListener('change', handlePhotoUpload);
-
-// 重新上传按钮点击处理
-document.addEventListener('DOMContentLoaded', function() {
-    const reuploadBtn = document.querySelector('.reupload-btn');
-    if (reuploadBtn) {
-        reuploadBtn.addEventListener('click', function() {
-            const fileInput = document.getElementById('photoInput');
-            if (fileInput) {
-                // 清除之前的文件选择
-                fileInput.value = '';
-                // 触发文件选择
-                fileInput.click();
-            }
-        });
-    }
-});
 
 // 处理照片上传
 async function handlePhotoUpload(event) {

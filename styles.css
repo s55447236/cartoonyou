@@ -364,6 +364,7 @@ p {
     gap: 3rem;
     width: 100%;
     opacity: 1;
+    padding-top: 1.3rem;
     transition: opacity 0.3s ease;
     margin: 32px auto 0 auto;
 
@@ -432,12 +433,21 @@ p {
 
 .style-card {
     position: relative;
-    width: 100%;
-    aspect-ratio: 1;
-    border-radius: 28px;
+    width: 270px;
+    height: 310px;
+    border-radius: 32px;
     overflow: hidden;
     cursor: pointer;
-    transition: all 0.3s ease;
+    border: 3px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.style-card:hover {
+    transform: scale(1.02);
+}
+
+.style-card.active {
+    border: 3px solid var(--main-btn-color);
 }
 
 .style-card .result-img {
@@ -464,28 +474,22 @@ p {
     opacity: 1;
   }
 
-.style-card.active {
-  border: 3px solid var(--main-btn-color);
-}
-
-
-
 .action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 56px;
     height: 56px;
     border-radius: 50%;
     background: var(--main-btn-color);
     border: none;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .action-btn:hover {
-    background: var(--hover-btn-color);
-    transform: scale(1.1);
+  background: var(--hover-btn-color);
+  transform: scale(1.1);
 }
 
 .action-btn svg {
@@ -546,7 +550,6 @@ p {
   font-size: 14px;
   font-weight: 500;
 }
-
 
 .style-card.active::after {
   content: '';
@@ -1143,21 +1146,19 @@ p {
 
 /* 上传图片容器样式 */
 .uploaded-image-container {
-    display: flex;
-    height: 440px;
-    flex-direction: column;
-    align-items: center;
-    width: 240px;
+    width: 210px;
     height: 240px;
     border-radius: 20px;
     overflow: hidden;
     position: relative;
     margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .uploaded-image-container:hover {
     transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
 .uploaded-image-container img {
@@ -1213,16 +1214,49 @@ p {
     font-weight: 500;
 }
 
+/* 加载状态：显示进度条和文本，隐藏重新上传按钮 */
+.uploaded-image-container.loading .loading-overlay {
+    opacity: 1;
+    visibility: visible;
+    background: rgba(0, 0, 0, 0.9);
+}
 
-/* 悬停状态 */
+.uploaded-image-container.loading .loading-overlay .progress-bar,
+.uploaded-image-container.loading .loading-overlay .progress-text {
+    display: block;
+}
+
+.uploaded-image-container.loading .loading-overlay .reupload-btn {
+    display: none !important;
+    pointer-events: none;
+}
+
+/* 悬停状态：只在非加载状态下显示重新上传按钮 */
 .uploaded-image-container:hover:not(.loading) .loading-overlay {
     opacity: 1;
     visibility: visible;
+    background: rgba(0, 0, 0, 0.7);
 }
 
-/* 重新上传按钮样式 */
+.uploaded-image-container:hover:not(.loading) .loading-overlay .reupload-btn {
+    display: block;
+}
+
+/* 重新上传按钮默认状态 */
 .uploaded-image-container .loading-overlay .reupload-btn {
     display: none;
+    background: var(--main-btn-color);
+    color: #000;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 99px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-btn {
     background: var(--main-btn-color);
     color: #000;
     padding: 12px 24px;
@@ -1242,7 +1276,6 @@ p {
     display: none !important;
     pointer-events: none;
 }
-
 
 .next-btn {
     background-color: #4CAF50;
@@ -1276,8 +1309,10 @@ p {
 
 #previewSection {
     position: absolute;
+    top: 3rem;
     left: 50%;
     transform: translateX(-50%);
+    border-radius: 32px;
     transition: all 0.3s ease;
     text-align: center;
     margin: 32px auto 0px auto;
@@ -1344,8 +1379,6 @@ p {
     left: 50%;
     transform: translateX(-50%);
 }
-
-
 
 .create-cartoon-btn {
     position: absolute;

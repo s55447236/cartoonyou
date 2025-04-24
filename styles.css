@@ -1167,17 +1167,24 @@ footer {
 }
 
 .uploaded-image-container.loading .loading-overlay .reupload-btn {
-    display: none;
+    display: none !important;
+    pointer-events: none;
 }
 
-/* 悬停状态：只显示重新上传按钮 */
+/* 悬停状态：只在非加载状态下显示重新上传按钮 */
 .uploaded-image-container:hover:not(.loading) .loading-overlay {
     opacity: 1;
     visibility: visible;
+    background: rgba(0, 0, 0, 0.7);
 }
 
-/* 重新上传按钮样式 */
+.uploaded-image-container:hover:not(.loading) .loading-overlay .reupload-btn {
+    display: block;
+}
+
+/* 重新上传按钮默认状态 */
 .uploaded-image-container .loading-overlay .reupload-btn {
+    display: none;
     background: var(--main-btn-color);
     color: #000;
     padding: 12px 24px;
@@ -1187,11 +1194,6 @@ footer {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-}
-
-.uploaded-image-container .loading-overlay .reupload-btn:hover {
-    background: var(--hover-btn-color);
-    transform: scale(1.05);
 }
 
 .upload-btn {

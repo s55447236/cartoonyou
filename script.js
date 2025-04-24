@@ -25,6 +25,18 @@ document.addEventListener('DOMContentLoaded', function() {
     if (nextStepBtn) {
         nextStepBtn.addEventListener('click', goToNextStep);
     }
+
+    // 设置重新上传功能
+    const reuploadBtn = document.querySelector('.reupload-btn');
+    if (reuploadBtn) {
+        reuploadBtn.addEventListener('click', function() {
+            const fileInput = document.getElementById('photoInput');
+            if (fileInput) {
+                fileInput.value = '';
+                fileInput.click();
+            }
+        });
+    }
 });
 
 /**
@@ -647,22 +659,6 @@ function setupContactDialog() {
 // 文件上传处理
 document.getElementById('photoInput').addEventListener('change', handlePhotoUpload);
 
-// 重新上传按钮点击处理
-document.addEventListener('DOMContentLoaded', function() {
-    const reuploadBtn = document.querySelector('.reupload-btn');
-    if (reuploadBtn) {
-        reuploadBtn.addEventListener('click', function() {
-            const fileInput = document.getElementById('photoInput');
-            if (fileInput) {
-                // 清除之前的文件选择
-                fileInput.value = '';
-                // 触发文件选择
-                fileInput.click();
-            }
-        });
-    }
-});
-
 // 处理照片上传
 async function handlePhotoUpload(event) {
     const file = event.target.files[0];
@@ -680,8 +676,8 @@ async function handlePhotoUpload(event) {
         text: '正在上传...',
         showProgress: true,
         showReuploadButton: true,
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-        textColor: '#333'
+        backgroundColor: 'var(--overlay-color)',
+        textColor: '#fff'
     });
 
     // 设置重新上传按钮事件
@@ -715,38 +711,23 @@ async function handlePhotoUpload(event) {
     // 挂载并显示加载遮罩
     loadingOverlay.mount(imageContainer);
     loadingOverlay.show();
-    loadingOverlay.hideReuploadButton(); // 上传过程中隐藏重新上传按钮
+    loadingOverlay.hideReuploadButton();
     
     try {
         // 创建预览
         const reader = new FileReader();
-        reader.onload = async function(e) {
+        reader.onload = function(e) {
             uploadedImage.src = e.target.result;
+            loadingOverlay.updateProgress(100);
             
-            // 模拟上传进度
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 100/30; // 3秒完成
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    progress = 100;
-                }
-                loadingOverlay.updateProgress(progress);
-            }, 100);
-
-            // 等待3秒模拟上传
-            await new Promise(resolve => setTimeout(resolve, 3000));
+            // 上传完成后直接隐藏加载遮罩
+            loadingOverlay.hide();
+            loadingOverlay.showReuploadButton();
             
-            // 上传完成
-            loadingOverlay.updateText('上传完成！');
-            setTimeout(() => {
-                loadingOverlay.hide();
-                loadingOverlay.showReuploadButton();
-                // 启用创建按钮
-                if (nextStepBtn) {
-                    nextStepBtn.disabled = false;
-                }
-            }, 500);
+            // 启用创建按钮
+            if (nextStepBtn) {
+                nextStepBtn.disabled = false;
+            }
         };
         reader.readAsDataURL(file);
         

@@ -4,7 +4,7 @@ class LoadingOverlay {
             text: '加载中...',
             showProgress: true,
             showReuploadButton: false,
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            backgroundColor: 'var(--overlay-color)',
             textColor: '#fff',
             ...options
         };

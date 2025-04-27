@@ -1,0 +1,12 @@
+{
+  "name": "cartoonme",
+  "version": "1.0.0",
+  "description": "Cartoon avatar generator",
+  "scripts": {
+    "dev": "http-server -p 5500 -c-1 --cors",
+    "start": "http-server -p 5500 -c-1 --cors"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+} 

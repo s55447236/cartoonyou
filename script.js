@@ -68,17 +68,19 @@ function setupStyleCards() {
         styleCards[1].classList.add('active');
     }
     
-    styleCards.forEach(card => {
-        // 点击卡片的处理
+    styleCards.forEach((card, index) => {
         card.addEventListener('click', () => {
-            // 如果点击的是当前选中的卡片，不做任何操作
             if (card.classList.contains('active')) {
                 return;
             }
-            // 移除其他卡片的选中状态
             styleCards.forEach(c => c.classList.remove('active'));
-            // 添加当前卡片的选中状态
             card.classList.add('active');
+            
+            // 存储选中的face_id
+            const resultImg = card.querySelector('.result-img');
+            if (resultImg && resultImg.dataset.faceId) {
+                selectedFaceId = resultImg.dataset.faceId;
+            }
         });
 
         // 重试按钮点击处理
@@ -304,6 +306,9 @@ class FileUploadHandler {
     }
 }
 
+// 存储当前选中的face_id
+let selectedFaceId = null;
+
 /**
  * 处理动画生成
  */
@@ -320,84 +325,98 @@ function setupAnimationGeneration() {
         // 检查是否选择了表情
         const selectedEmotions = document.querySelectorAll('.emotions-preview .emotion.active');
         if (selectedEmotions.length === 0) {
-            alert('请选择一个表情');
+            alert('请选择至少一个表情');
             return;
         }
 
-        // 查找结果展示区域
-        const resultSection = Array.from(document.querySelectorAll('.step')).find(section => {
-            const title = section.querySelector('h2');
-            return title && title.textContent.includes('Hey there! Your cartoon version is all set!');
-        });
-
-        if (!resultSection) {
-            console.error('找不到结果展示区域');
+        // 检查是否有选中的虚拟形象
+        if (!selectedFaceId) {
+            alert('请先选择一个虚拟形象');
             return;
         }
 
-        // 滚动到结果区域
-        const offset = 80;
-        const elementPosition = resultSection.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - offset;
+        // 获取选中的表情类型
+        const emojiTypes = Array.from(selectedEmotions)
+            .map(emotion => emotion.dataset.emotion)
+            .join(',');
 
-        window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-        });
-
-        // 获取标题和副标题元素
-        const titleElement = resultSection.querySelector('h2');
-        const subtitleElement = resultSection.querySelector('p');
-
-        // 保存原始文案
-        const originalTitle = titleElement.textContent;
-        const originalSubtitle = subtitleElement.textContent;
-
-        // 更改为加载状态的文案
-        titleElement.textContent = '正在创建表情包，请稍后';
-        subtitleElement.style.opacity = '0';
-
-        // 为所有结果卡片添加加载状态
-        resultCards.forEach(card => {
-            card.classList.add('loading');
-            const progressBar = card.querySelector('.progress');
-            const progressText = card.querySelector('.progress-text');
-            if (progressBar) progressBar.style.width = '0%';
-            if (progressText) progressText.textContent = '0%';
-        });
-
-        // 模拟3秒加载过程
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += 100/30; // 3秒完成
-            if (progress >= 100) {
-                clearInterval(interval);
-                progress = 100;
-                
-                // 加载完成后恢复原始文案
-                setTimeout(() => {
-                    titleElement.textContent = originalTitle;
-                    subtitleElement.style.opacity = '1';
-                    
-                    // 移除所有卡片的加载状态
-                    resultCards.forEach(card => {
-                        card.classList.remove('loading');
-                    });
-                }, 200);
-            }
-            
-            // 更新所有卡片的进度条
+        try {
+            // 显示加载状态
             resultCards.forEach(card => {
+                card.classList.add('loading');
                 const progressBar = card.querySelector('.progress');
                 const progressText = card.querySelector('.progress-text');
-                if (progressBar) progressBar.style.width = `${progress}%`;
-                if (progressText) progressText.textContent = `${Math.round(progress)}%`;
+                if (progressBar) progressBar.style.width = '0%';
+                if (progressText) progressText.textContent = '0%';
             });
-        }, 100);
+
+            // 1. 生成静态表情包
+            const emojis = await apiService.generateEmojis(selectedFaceId, emojiTypes);
+            
+            // 2. 生成动态表情包
+            const emojiIds = emojis.map(emoji => emoji.emoji_id);
+            const liveEmojis = await apiService.generateLiveEmojis(emojiIds);
+
+            // 3. 更新结果卡片
+            resultCards.forEach((card, index) => {
+                if (liveEmojis[index]) {
+                    const mediaContainer = card.querySelector('.result-media');
+                    const previewUrl = apiService.getLiveEmojiPreviewUrl(liveEmojis[index].live_emoji_id);
+                    
+                    mediaContainer.innerHTML = `
+                        <video autoplay loop muted playsinline>
+                            <source src="${previewUrl}" type="video/mp4">
+                        </video>
+                    `;
+                }
+                card.classList.remove('loading');
+            });
+
+        } catch (error) {
+            console.error('生成表情包失败:', error);
+            alert('生成表情包失败，请重试');
+            resultCards.forEach(card => {
+                card.classList.remove('loading');
+            });
+        }
     });
 }
 
-// 下载功能实现
+// 修改上传照片函数
+async function uploadImageToServer() {
+    const fileInput = document.getElementById('photoInput');
+    if (!fileInput.files.length) {
+        throw new Error('请选择照片');
+    }
+
+    try {
+        const imageId = await apiService.uploadPhoto(fileInput.files[0]);
+        const faces = await apiService.generateFaces(imageId, 3);
+        
+        // 存储第一个face_id作为默认选中
+        if (faces.length > 0) {
+            selectedFaceId = faces[0].face_id;
+        }
+        
+        return {
+            success: true,
+            data: {
+                styles: faces.map(face => ({
+                    url: apiService.getFacePreviewUrl(face.face_id),
+                    faceId: face.face_id
+                }))
+            }
+        };
+    } catch (error) {
+        console.error('上传失败:', error);
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+}
+
+// 修改下载功能
 function downloadImage(url, filename) {
     fetch(url)
         .then(response => response.blob())
@@ -416,7 +435,7 @@ function downloadImage(url, filename) {
         });
 }
 
-// 下载视频功能
+// 修改下载视频功能
 function downloadVideo(url, filename) {
     fetch(url)
         .then(response => response.blob())
@@ -837,7 +856,6 @@ async function goToNextStep() {
         const response = await uploadImageToServer();
         
         if (response.success) {
-            // 为每个卡片设置进度动画
             let completedCards = 0;
             styleCards.forEach((card, index) => {
                 let progress = 0;
@@ -847,17 +865,17 @@ async function goToNextStep() {
                         progress = 100;
                         clearInterval(interval);
                         
-                        // 更新样式卡片图片
                         const resultImg = card.querySelector('.result-img');
                         if (resultImg) {
-                            resultImg.src = response.data.styles[index];
-                            // 渐显图片
+                            resultImg.src = response.data.styles[index].url;
+                            // 存储face_id到图片元素
+                            resultImg.dataset.faceId = response.data.styles[index].faceId;
+                            
                             setTimeout(() => {
                                 resultImg.style.opacity = '1';
                                 card.classList.remove('loading');
                                 card.style.pointerEvents = 'auto';
                                 
-                                // 检查是否所有卡片都加载完成
                                 completedCards++;
                                 if (completedCards === styleCards.length) {
                                     // 所有卡片加载完成后恢复原始文案和功能
@@ -924,38 +942,18 @@ async function goToNextStep() {
     }
 }
 
-// 模拟后端API调用
-async function uploadImageToServer() {
-    // 模拟API延迟
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 1000 + 500));
-    
-    // 模拟API返回数据
-    return {
-        success: true,
-        data: {
-            styles: [
-                'images/result1.png',
-                'images/result2.png',
-                'images/result3.png'
-            ]
-        }
-    };
-}
-
 // 设置结果卡片点击事件
 function setupResultCards() {
     const resultCards = document.querySelectorAll('.result-card');
     
-    // 设置默认视频
     resultCards.forEach((card, index) => {
         const mediaContainer = card.querySelector('.result-media');
         if (mediaContainer) {
-            // 添加默认视频
+            // 添加占位符
             mediaContainer.innerHTML = `
-                <video autoplay loop muted playsinline>
-                    <source src="animations/result${index + 1}.webm" type="video/webm">
-                    <source src="animations/result${index + 1}.mp4" type="video/mp4">
-                </video>
+                <div class="placeholder">
+                    <span>点击"Make it move"生成动画</span>
+                </div>
             `;
         }
 
